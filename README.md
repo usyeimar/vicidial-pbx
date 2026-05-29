@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/vicidial-logo.png" alt="VICIdial" width="360"/>
+</p>
+
 <h1 align="center">VICIdial — Dockerized</h1>
 
 <p align="center">
