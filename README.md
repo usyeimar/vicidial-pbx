@@ -1,8 +1,8 @@
 <h1 align="center">VICIdial — Dockerized</h1>
 
 <p align="center">
-  <strong>Plataforma de call center y marcador predictivo de código abierto, en contenedores.</strong><br/>
-  VICIdial (SVN trunk) + Asterisk 20 + MariaDB, listos con un solo comando.
+  <strong>Open-source call center & predictive dialer, in containers.</strong><br/>
+  VICIdial (SVN trunk) + Asterisk 20 + MariaDB, ready with a single command.
 </p>
 
 <p align="center">
@@ -15,43 +15,43 @@
 
 ---
 
-## ¿Qué es esto?
+## What is this?
 
-**VICIdial** es la suite de **call center de código abierto** más extendida del mundo: corre sobre Asterisk y añade todo lo que necesita un centro de contacto profesional — **marcador predictivo** para campañas salientes, gestión de campañas entrantes/salientes/mixtas, paneles de agente y de administración por navegador, grabación de llamadas, reportes en tiempo real, listas de contactos y reglas de discado. Es el motor detrás de incontables operaciones de telemarketing, cobranza y soporte.
+**VICIdial** is the world's most widely deployed **open-source call center** suite: it runs on top of Asterisk and adds everything a professional contact center needs — a **predictive dialer** for outbound campaigns, inbound/outbound/blended campaign management, browser-based agent and admin panels, call recording, real-time reports, contact lists, and dialing rules. It's the engine behind countless telemarketing, collections, and support operations.
 
-Su fama también incluye lo difícil que es instalarlo sobre metal: compilar Asterisk, parchear Perl, importar el esquema SQL y alinear decenas de dependencias del lado de RockyLinux/CentOS.
+Its reputation also includes how painful it is to install on bare metal: compiling Asterisk, patching Perl, importing the SQL schema, and lining up dozens of RockyLinux/CentOS-side dependencies.
 
-**Este repositorio lo Dockeriza de punta a punta:**
+**This repository Dockerizes it end to end:**
 
-- 🐳 **Imagen construida desde `source/Dockerfile`** — Asterisk 20 compilado desde el código oficial sobre Rocky Linux 9, más el checkout de VICIdial vía SVN trunk.
-- 🗄️ **MariaDB** con el esquema importado automáticamente en el primer arranque (`init.sql`).
-- 🔧 **Modo `privileged`** para el timing de DAHDI que requiere Asterisk.
-- 📜 **Scripts y `.env`** que automatizan build, arranque, logs y limpieza, y aíslan la `SERVER_IP` y los passwords.
-- 🤝 **Pensado para convivir con FreePBX en el mismo host** — usa una subred y puertos desplazados (8082/8443, 5062, 12000-12100) para no chocar.
+- 🐳 **An image built from `source/Dockerfile`** — Asterisk 20 compiled from official source on Rocky Linux 9, plus the VICIdial checkout via SVN trunk.
+- 🗄️ **MariaDB** with the schema imported automatically on first boot (`init.sql`).
+- 🔧 **`privileged` mode** for the DAHDI timing Asterisk requires.
+- 📜 **Scripts and `.env`** that automate build, startup, logs, and cleanup, and isolate `SERVER_IP` and passwords.
+- 🤝 **Designed to coexist with FreePBX on the same host** — it uses its own subnet and shifted ports (8082/8443, 5062, 12000-12100) to avoid clashes.
 
-En resumen: pasas de cero a una plataforma de call center funcional con `./scripts/start.sh`, en lugar de seguir un manual de instalación de varias horas.
+In short: you go from zero to a working call center platform with `./scripts/start.sh`, instead of following a multi-hour install guide.
 
 ---
 
-## Requisitos
+## Requirements
 
 - Docker + Docker Compose
-- Linux (DAHDI requiere acceso al kernel → `privileged: true`)
-- Mínimo: 4 cores, 8 GB RAM, SSD
+- Linux (DAHDI needs kernel access → `privileged: true`)
+- Minimum: 4 cores, 8 GB RAM, SSD
 
-## Inicio rápido
+## Quickstart
 
 ```bash
 cp .env.example .env
-# Editar .env → cambiar SERVER_IP y passwords
+# Edit .env → set SERVER_IP and passwords
 
 chmod +x scripts/*.sh
 ./scripts/start.sh
 ```
 
-## Acceso
+## Access
 
-| Servicio     | URL                                         |
+| Service      | URL                                         |
 |--------------|---------------------------------------------|
 | Admin Panel  | `http://SERVER_IP/vicidial/welcome.php`     |
 | Agent Panel  | `http://SERVER_IP/agc/vicidial.php`         |
@@ -59,28 +59,28 @@ chmod +x scripts/*.sh
 
 ## Scripts
 
-| Script              | Descripción                    |
-|---------------------|--------------------------------|
-| `scripts/start.sh`  | Build + levantar servicios     |
-| `scripts/stop.sh`   | Detener servicios              |
-| `scripts/logs.sh`   | Ver logs (arg: nombre servicio)|
-| `scripts/clean.sh`  | Eliminar todo (volúmenes incl.)|
+| Script              | Description                       |
+|---------------------|-----------------------------------|
+| `scripts/start.sh`  | Build + start services            |
+| `scripts/stop.sh`   | Stop services                     |
+| `scripts/logs.sh`   | View logs (arg: service name)     |
+| `scripts/clean.sh`  | Remove everything (incl. volumes) |
 
-## Puertos
+## Ports
 
 - `80` — Web (HTTP)
 - `443` — Web (HTTPS)
 - `5060` — SIP (UDP/TCP)
 - `10000-10100` — RTP (UDP)
 
-## Notas
+## Notes
 
-- El contenedor corre en modo `privileged` para DAHDI timing
-- Primera ejecución importa el esquema SQL automáticamente
-- Cambiar password admin inmediatamente después del primer login
-- Para producción con +25 agentes, considerar cluster multi-servidor
+- The container runs in `privileged` mode for DAHDI timing
+- The first run imports the SQL schema automatically
+- Change the admin password immediately after the first login
+- For production with 25+ agents, consider a multi-server cluster
 
-## Estructura
+## Structure
 
 ```
 vicidial/
