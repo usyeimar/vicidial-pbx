@@ -51,11 +51,11 @@ chmod +x scripts/*.sh
 
 ## Access
 
-| Service      | URL                                         |
-|--------------|---------------------------------------------|
-| Admin Panel  | `http://SERVER_IP/vicidial/welcome.php`     |
-| Agent Panel  | `http://SERVER_IP/agc/vicidial.php`         |
-| Login        | `6666` / `1234`                             |
+| Service      | URL                                            |
+|--------------|------------------------------------------------|
+| Admin Panel  | `http://SERVER_IP:8082/vicidial/welcome.php`   |
+| Agent Panel  | `http://SERVER_IP:8082/agc/vicidial.php`       |
+| Login        | `6666` / `1234`                                |
 
 ## Scripts
 
@@ -68,10 +68,14 @@ chmod +x scripts/*.sh
 
 ## Ports
 
-- `80` — Web (HTTP)
-- `443` — Web (HTTPS)
-- `5060` — SIP (UDP/TCP)
-- `10000-10100` — RTP (UDP)
+Host ports are shifted so VICIdial can coexist with FreePBX on the same machine (see `compose.yml`). Use the **Host** column when connecting from outside the container.
+
+| Host        | Container    | Protocol | Service        |
+|:------------|:-------------|:---------|:---------------|
+| 8082        | 80           | TCP      | Web (HTTP)     |
+| 8443        | 443          | TCP      | Web (HTTPS)    |
+| 5062        | 5060         | UDP/TCP  | SIP signaling  |
+| 12000-12100 | 10000-10100  | UDP      | RTP (audio)    |
 
 ## Notes
 
